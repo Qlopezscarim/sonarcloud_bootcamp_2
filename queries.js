@@ -7,7 +7,7 @@ import { Sequelize, Model, DataTypes,  QueryTypes, sql } from '@sequelize/core';
   import { Listing } from './ListingModel.js';
 /* Connect to your database */
 //ADD CODE HERE to connect to you database - same code you put for JSONtoPostgreSQL.js and ListingModel.js
-
+const sequelize = new Sequelize(process.env.API_URL);
 /*There are many ways to make aynchronous calls in Javascript: Promises, callbacks, Asyc/Await - https://www.geeksforgeeks.org/difference-between-promise-and-async-await-in-node-js/
   Best Practice: A current practice is to use Async Await.  
   Async / Await - https://www.theodinproject.com/lessons/node-path-javascript-async-and-await and https://javascript.info/async-await
@@ -45,7 +45,6 @@ try {
     - Click on some of the Github examples and look at the workarounds and check that you are running the latest version of the Sequelize where patches have been issued.
   */
    
-   
         /* 
       Retrieve all listings in the database, and log them to the console. 
       Learn more about the finder methods available to sequelize models - https://sequelize.org/docs/v6/core-concepts/model-querying-finders/
@@ -53,6 +52,8 @@ try {
       async function retrieveAllListings() {
           //ADD CODE HERE
           console.log('Retrieving all listings');
+          const users = await Listing.findAll();
+          console.log("All users:", JSON.stringify(users, null));
       }
     /* 
     Find the document that contains data corresponding to Library West, then log it to the console. 
@@ -61,7 +62,9 @@ try {
     async function findLibraryWest() {
        //ADD CODE HERE
       console.log('Finding Library West');
-
+      const lib_west_data = await Listing.findAll({where: {name: "Library West"}});
+      console.log("\nLibrary west info: ", JSON.stringify(lib_west_data));
+      console.log("\n\n\n"); //just making it more clear where this ends
     }
 
     /*
@@ -72,8 +75,10 @@ try {
       Learn more about the finder methods available to sequelize models - https://sequelize.org/docs/v6/core-concepts/model-querying-finders/
     */
       async function removeCable() {
-         //ADD CODE HERE
-        console.log('Removing Cable BLDG');
+        const CABL_data = await Listing.findAll({where: {code: "CABL"}});
+        console.log("\nCABL things to be deleted: ", JSON.stringify(CABL_data));
+        Listing.destroy({where: {code: "CABL"}});
+        
     }
 
     /*
@@ -82,6 +87,18 @@ try {
     */
     async function addDSIT() {
        //ADD CODE HERE
+       let temp_var = {
+        code : "",
+        name : "",
+        coordinates : "",
+        address : ""
+      };
+      temp_var.code = "DSIT";
+      temp_var.name = "Malachowsky Hall for Data Science & Information Technology";
+      temp_var.coordinates = JSON.stringify({longitude:"29.6444",
+      latitude:"82.3477"});
+      temp_var.address = "Gainesville, FL Museum Rd and Center Dr 32603";
+      const place = Listing.create(temp_var);
       console.log('Adding the new DSIT BLDG that will be across from Reitz union. Bye Bye CSE, Hub, and French Fries.');
     }
    
@@ -93,19 +110,29 @@ try {
     */
     async function updatePhelpsLab() {
        //ADD CODE HERE
-       console.log('UpdatingPhelpsLab.');
+       //const phelps_data = await Listing.findAll({where: {name: "Phelps Laboratory"}});
+       Listing.update({address : "Address 1953 Museum Rd. Gainesville, FL 32611"},{where: {name: "Phelps Laboratory"}});
+       const phelps_data = await Listing.findAll({where: {name: "Phelps Laboratory"}});
+        console.log("\nUpdataed phelps lab info: ", JSON.stringify(phelps_data));
+       //console.log(Listing.findAll({where: {name: "Phelps Laboratory"}}));
  
     }
 
     
    console.log("Use these calls to test that your functions work. Use console.log statements in each so you can look at the terminal window to see what is executing. Also check the database.")
    //Calling all the functions to test them
-   retrieveAllListings() 
-   removeCable(); 
-   addDSIT();
-   updatePhelpsLab();
-   findLibraryWest();
-       
-  
+   async function runFunctionsSequentially()
+   {
+   await retrieveAllListings();
+   //await new Promise(r => setTimeout(r, 1000));
+   await removeCable(); 
+   //await new Promise(r => setTimeout(r, 2000));
+   await addDSIT();
+   //await new Promise(r => setTimeout(r, 2000));
+   await updatePhelpsLab();
+   //await new Promise(r => setTimeout(r, 2000));
+   await findLibraryWest();
+   }   
+  runFunctionsSequentially();
 
 

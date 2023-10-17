@@ -13,6 +13,9 @@
 
   //imports the Listing Model we created in ListingModels.js
   import { Listing } from './ListingModel.js';
+import { execPath } from 'process';
+
+  var listingData //global variables
 
 /* Connect to your database 
   See: Sequalize Getting Started - Connecting to a database by passing a URI - Read: https://sequelize.org/docs/v6/getting-started/#connecting-to-a-database
@@ -23,7 +26,7 @@
   Read - artilce to learn more about environment variables - https://medium.com/the-node-js-collection/making-your-node-js-work-everywhere-with-environment-variables-2da8cdf6e786
 */
 //ADD CODE HERE to connect to you database
-
+const sequelize = new Sequelize(process.env.API_URL);
 //Testing that the .env file is working - This should print out the port number
 console.log(process.env.PORT); //Should print out 8080 
 console.log(process.env.API_Key); //Should print out "Key Not set - starter code only"
@@ -41,15 +44,44 @@ console.log(process.env.API_Key); //Should print out "Key Not set - starter code
     // Errors-Check out this resource for an idea of the general format err objects and Throwing an existing object.
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/throw#throwing_an_existing_object
     if (err) throw err;
-    console.log(data);
 
     //Save and parse the data from the listings.json file into a variable, so that we can iterate through each instance - Similar to Bootcamp#1
    //ADD CODE HERE
-  
+    listingData = JSON.parse(data);
+    //console.log("updated listingData");
+    //console.log(listingData.entries);
      //Use Sequelize create a new row in our database for each entry in our listings.json file using the Listing model we created in ListingModel.js
-    // to https://sequelize.org/docs/v6/core-concepts/model-instances/#creating-an-instance
+    // to https://sequelize.org/docs/v6/core-concepts/moances/#creating-an-instance
      //ADD CODE HERE
+      //for (let key in listingData.jsonData)
+      //{
+      //  const place = Listing.create(json.jsonData[key]);
+      // console.log(json.jsonData[key][key2]);
+      //  console.log("transferred one.");
+      //}
 
+      for (let object_1 in listingData.entries)
+      {
+        let temp_var = {
+          code : "",
+          name : "",
+          coordinates : "",
+          address : ""
+        };
+        temp_var.code = listingData.entries[object_1].code;
+        temp_var.name = listingData.entries[object_1].name;
+        try{
+          let temp_thing = listingData.entries[object_1].coordinates;
+          temp_var.coordinates = JSON.stringify(temp_thing);
+        }
+        catch
+        {}//does nothing
+        temp_var.address = listingData.entries[object_1].address;
+        
+        const place = Listing.create(temp_var);
+        //console.log(listingData.entries[object_1]);
+        //console.log("transferred one.");
+      }
     });
 } catch (error) {
   console.error('Unable to connect to the database:', error);

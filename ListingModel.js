@@ -14,7 +14,7 @@ import { Sequelize, Model, DataTypes } from '@sequelize/core';
   Read - artilce to learn more about environment variables - https://medium.com/the-node-js-collection/making-your-node-js-work-everywhere-with-environment-variables-2da8cdf6e786
 */
 //ADD CODE HERE to connect to you database
-
+const sequelize = new Sequelize(process.env.API_URL);
 /* Create your Sequalize Model for Listing */
 /*Hint: Take a look at listings.json to figure out the model attributes we need to define.
   We are creating this model to define the format of our table.
@@ -22,6 +22,18 @@ import { Sequelize, Model, DataTypes } from '@sequelize/core';
   Also Check out - //Data Types - https://sequelize.org/docs/v6/core-concepts/model-basics/#data-types
 */
 const Listing = sequelize.define('Listing', {
+  code: {
+    type: DataTypes.STRING
+  },
+  name: {
+    type: DataTypes.STRING
+  },
+  coordinates: {
+    type: DataTypes.JSONB
+  },
+  address: {
+    type: DataTypes.STRING
+  }
   // Model attributes are defined here
   //ADD CODE HERE
 }, {
@@ -30,8 +42,6 @@ const Listing = sequelize.define('Listing', {
 });
 
 // `sequelize.define` also returns the model
-console.log(Listing === sequelize.models.Listing); // true
-console.log(Listing);
 
 /* Export the model to make it avaiable to other parts of your Node application */
 //Read article "ES6 Modules and How to Use Import and Export in JavaScript" https://www.digitalocean.com/community/tutorials/js-modules-es6
