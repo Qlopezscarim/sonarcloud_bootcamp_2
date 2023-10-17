@@ -34,10 +34,7 @@ const Listing = sequelize.define('Listing', {
   address: {
     type: DataTypes.STRING
   }
-  // Model attributes are defined here
-  //ADD CODE HERE
 }, {
-  // Other model options go here
   tableName: 'Listings'
 });
 

@@ -48,17 +48,6 @@ console.log(process.env.API_Key); //Should print out "Key Not set - starter code
     //Save and parse the data from the listings.json file into a variable, so that we can iterate through each instance - Similar to Bootcamp#1
    //ADD CODE HERE
     listingData = JSON.parse(data);
-    //console.log("updated listingData");
-    //console.log(listingData.entries);
-     //Use Sequelize create a new row in our database for each entry in our listings.json file using the Listing model we created in ListingModel.js
-    // to https://sequelize.org/docs/v6/core-concepts/moances/#creating-an-instance
-     //ADD CODE HERE
-      //for (let key in listingData.jsonData)
-      //{
-      //  const place = Listing.create(json.jsonData[key]);
-      // console.log(json.jsonData[key][key2]);
-      //  console.log("transferred one.");
-      //}
 
       for (let object_1 in listingData.entries)
       {
@@ -79,8 +68,6 @@ console.log(process.env.API_Key); //Should print out "Key Not set - starter code
         temp_var.address = listingData.entries[object_1].address;
         
         const place = Listing.create(temp_var);
-        //console.log(listingData.entries[object_1]);
-        //console.log("transferred one.");
       }
     });
 } catch (error) {

@@ -77,6 +77,7 @@ try {
       async function removeCable() {
         const CABL_data = await Listing.findAll({where: {code: "CABL"}});
         console.log("\nCABL things to be deleted: ", JSON.stringify(CABL_data));
+        console.log("\n");
         Listing.destroy({where: {code: "CABL"}});
         
     }
@@ -110,11 +111,9 @@ try {
     */
     async function updatePhelpsLab() {
        //ADD CODE HERE
-       //const phelps_data = await Listing.findAll({where: {name: "Phelps Laboratory"}});
        Listing.update({address : "Address 1953 Museum Rd. Gainesville, FL 32611"},{where: {name: "Phelps Laboratory"}});
        const phelps_data = await Listing.findAll({where: {name: "Phelps Laboratory"}});
         console.log("\nUpdataed phelps lab info: ", JSON.stringify(phelps_data));
-       //console.log(Listing.findAll({where: {name: "Phelps Laboratory"}}));
  
     }
 
@@ -124,13 +123,9 @@ try {
    async function runFunctionsSequentially()
    {
    await retrieveAllListings();
-   //await new Promise(r => setTimeout(r, 1000));
    await removeCable(); 
-   //await new Promise(r => setTimeout(r, 2000));
    await addDSIT();
-   //await new Promise(r => setTimeout(r, 2000));
    await updatePhelpsLab();
-   //await new Promise(r => setTimeout(r, 2000));
    await findLibraryWest();
    }   
   runFunctionsSequentially();
